@@ -1,0 +1,7 @@
+---
+# Применение роли Nginx на всех хостах с правами суперпользователя
+- name: Converge
+  hosts: all
+  become: true
+  roles:
+    - role: nginx

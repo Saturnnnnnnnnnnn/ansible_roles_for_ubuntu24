@@ -1,0 +1,22 @@
+# Создание необходимых групп
+users_groups:
+  - devops
+  - docker
+
+# Конфигурация пользователей
+users_users:
+  - user_name: test_user
+    shell: /bin/bash
+    password: "{{ 'password123' | password_hash('sha512') }}"
+    user_groups:
+      - devops
+    state: present
+    ssh_key: "Сгенерируйте SSH ключ для test_user"
+
+  - user_name: test_user1
+    shell: /bin/zsh
+    password: "{{ 'password321' | password_hash('sha512') }}"
+    user_groups:
+      - docker
+    state: present
+    ssh_key: "Сгенерируйте SSH ключ для test_user1"

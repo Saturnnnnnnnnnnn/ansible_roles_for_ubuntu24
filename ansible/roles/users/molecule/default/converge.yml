@@ -1,0 +1,7 @@
+---
+# Применение роли для настройки пользователей
+- name: Converge
+  hosts: all
+  become: true
+  roles:
+    - role: users

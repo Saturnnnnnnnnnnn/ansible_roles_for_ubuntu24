@@ -1,0 +1,6 @@
+---
+- name: Configure ZSH for users
+  hosts: localhost
+  remote_user: ansible
+  roles:
+    - zsh

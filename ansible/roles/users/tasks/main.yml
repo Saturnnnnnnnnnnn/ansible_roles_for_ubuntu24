@@ -1,0 +1,26 @@
+---
+# Обеспечение существования групп пользователей
+- name: Ensure groups exist
+  ansible.builtin.group:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ users_groups }}"
+
+# Управление пользователями: создание, изменение оболочек и паролей
+- name: Manage users
+  ansible.builtin.user:
+    name: "{{ item.user_name }}"
+    shell: "{{ item.shell }}"
+    password: "{{ item.password }}"
+    groups: "{{ item.user_groups | join(',') }}"
+    state: "{{ item.state }}"
+  loop: "{{ users_users }}"
+
+# Добавление SSH-ключей для пользователей
+- name: Add SSH public keys for users
+  ansible.posix.authorized_key:
+    user: "{{ item.user_name }}"
+    state: present
+    key: "{{ item.ssh_key }}"
+  loop: "{{ users_users }}"
+  when: item.ssh_key is defined

@@ -1,0 +1,34 @@
+dependency:
+  name: galaxy
+
+driver:
+  name: docker
+  options:
+    image: ubuntu:24.04
+    build:
+      context: .
+      dockerfile: ../Dockerfile
+    privileged: true
+    command: "bash -c 'while true; do sleep 1000; done'"
+    container_name: ansible_test_env
+    volumes:
+      - ./ansible:/ansible
+
+platforms:
+  - name: instance
+    image: ubuntu:24.04
+    privileged: true
+    ansible_user: ansible
+    ansible_become: true
+    ansible_password: ansible
+
+provisioner:
+  name: ansible
+  options:
+    verbose: true
+
+scenario:
+  name: default
+  test_sequence:
+    - create
+    - converge

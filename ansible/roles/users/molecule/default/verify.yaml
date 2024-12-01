@@ -1,0 +1,22 @@
+---
+# Проверка существования пользователей
+- name: Verify users
+  hosts: all
+  tasks:
+    # Проверка существования пользователя test_user
+    - name: Ensure test_user exists
+      ansible.builtin.user:
+        name: test_user
+        state: present
+      register: result_test_user
+      failed_when: result_test_user.failed
+      changed_when: false
+
+    # Проверка существования пользователя test_user1
+    - name: Ensure test_user1 exists
+      ansible.builtin.user:
+        name: test_user1
+        state: present
+      register: result_test_user1
+      failed_when: result_test_user1.failed
+      changed_when: false

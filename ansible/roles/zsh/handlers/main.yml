@@ -1,0 +1,9 @@
+---
+# Перезапуск оболочки для пользователя после установки zsh
+- name: Restart shell for user after zsh install
+  ansible.builtin.command:
+    cmd: "sudo -u {{ item.name }} zsh"
+  loop: "{{ zsh_users }}"
+  when: item.shell == '/bin/zsh'
+  become: true
+  changed_when: false

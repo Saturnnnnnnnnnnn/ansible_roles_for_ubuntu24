@@ -1,0 +1,7 @@
+---
+# Настройка SSH для повышения безопасности
+- name: Configure SSH for security
+  hosts: all
+  become: true
+  roles:
+    - ssh

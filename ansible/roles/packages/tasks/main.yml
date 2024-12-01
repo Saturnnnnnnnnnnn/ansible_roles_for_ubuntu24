@@ -1,0 +1,22 @@
+---
+# Обновление и установка необходимых пакетов
+- name: Update and install required packages
+  become: true
+  block:
+    # Обновление списка пакетов
+    - name: Update package list
+      ansible.builtin.apt:
+        update_cache: true
+
+    # Включение репозитория "universe" для некоторых недостающих пакетов
+    - name: Ensure universe repository is enabled (for some missing packages)
+      ansible.builtin.apt_repository:
+        repo: 'deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release | lower }} universe'
+        state: present
+
+    # Установка необходимых пакетов
+    - name: Install required packages
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ packages_list }}"

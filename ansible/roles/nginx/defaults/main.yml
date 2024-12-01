@@ -1,0 +1,6 @@
+---
+# Путь к директории, где Nginx будет искать статические файлы
+nginx_static_dir: /var/www/static
+
+# URL путь для доступа к изображениям через Nginx
+nginx_image_url: /images

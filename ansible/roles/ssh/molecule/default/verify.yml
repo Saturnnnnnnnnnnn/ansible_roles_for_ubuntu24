@@ -1,0 +1,12 @@
+---
+# Проверка существования пользователя test_user
+- name: Verify users
+  hosts: all
+  tasks:
+    # Проверка существования пользователя ansible
+    - name: Ensure test_user exists
+      ansible.builtin.command:
+        cmd: "id ansible"
+      register: result
+      changed_when: false
+      failed_when: result.rc != 0

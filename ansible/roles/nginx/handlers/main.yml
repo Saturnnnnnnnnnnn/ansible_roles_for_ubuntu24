@@ -1,0 +1,7 @@
+---
+# Перезапуск Nginx, если конфигурация была изменена
+- name: Restart nginx
+  ansible.builtin.systemd:
+    name: nginx
+    state: restarted
+    enabled: true

@@ -1,0 +1,22 @@
+server {
+    listen {{ nginx_listen_port }};
+    server_name localhost;
+
+    root /var/www/html;
+
+    # Статика
+    location /images/ {
+        alias {{ nginx_static_dir }}/;
+        autoindex on;
+        gzip on;
+        gzip_types text/plain text/css application/javascript image/jpeg image/png image/gif image/svg+xml;
+        gzip_min_length 1000;
+        expires 1h;
+        access_log {{ nginx_log_dir }}/access.log;
+    }
+
+    # Основной сайт
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}

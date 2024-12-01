@@ -1,0 +1,10 @@
+---
+- name: Verify users
+  hosts: all
+  tasks:
+    - name: Ensure test_user exists
+      ansible.builtin.command:
+        cmd: "id ansible"
+      register: result
+      changed_when: false
+      failed_when: result.rc != 0

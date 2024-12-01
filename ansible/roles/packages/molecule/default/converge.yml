@@ -1,0 +1,8 @@
+---
+# Применение роли на всех хостах
+- name: Converge
+  hosts: all
+  become: true
+  roles:
+    # Подключение роли "packages"
+    - role: packages

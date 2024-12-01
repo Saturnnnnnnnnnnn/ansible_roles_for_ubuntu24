@@ -1,0 +1,6 @@
+---
+- name: Run users role on localhost
+  hosts: localhost
+  remote_user: ansible
+  roles:
+    - users

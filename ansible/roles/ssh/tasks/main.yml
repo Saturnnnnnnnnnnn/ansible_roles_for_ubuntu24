@@ -1,0 +1,45 @@
+---
+# Обеспечение существования директории /etc/ssh
+- name: Ensure /etc/ssh directory exists
+  ansible.builtin.file:
+    path: /etc/ssh
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+# Убедиться, что файл sshd_config существует с дефолтным содержимым
+- name: Ensure sshd_config exists with default content if absent
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_config
+    state: touch
+    owner: root
+    group: root
+    mode: '0644'
+
+# Отключение входа для пользователя root
+- name: Disable root login
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PermitRootLogin'
+    line: 'PermitRootLogin no'
+    state: present
+  notify: restart ssh
+
+# Отключение пустых паролей
+- name: Disable empty passwords
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PermitEmptyPasswords'
+    line: 'PermitEmptyPasswords no'
+    state: present
+  notify: restart ssh
+
+# Установка уровня логирования на VERBOSE
+- name: Set log level to VERBOSE
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?LogLevel'
+    line: 'LogLevel VERBOSE'
+    state: present
+  notify: restart ssh

@@ -1,0 +1,39 @@
+---
+# Установка Nginx, если система на базе Debian
+- name: Install Nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+  when: ansible_os_family == "Debian"
+
+# Создание директории для статических файлов, если она не существует
+- name: Create static directory if it doesn't exist
+  ansible.builtin.file:
+    path: "{{ nginx_static_dir }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+# Копирование всех статических файлов в директорию Nginx
+- name: Copy all static files to Nginx static directory
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ nginx_static_dir }}/{{ item | basename }}"
+    owner: www-data
+    group: www-data
+    mode: '0755'
+  with_fileglob: "{{ nginx_static_files_path }}/*"
+
+# Настройка конфигурации Nginx из шаблона
+- name: Configure Nginx
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/default
+    mode: '0644'
+
+# Перезагрузка Nginx для применения изменений
+- name: Restart nginx using command
+  ansible.builtin.command:
+    cmd: nginx -s reload
+  become: true

@@ -1,0 +1,9 @@
+- name: Configure static server
+  hosts: all
+  become: true
+  roles:
+    - ssh
+    - users
+    - packages
+    - zsh
+    - nginx

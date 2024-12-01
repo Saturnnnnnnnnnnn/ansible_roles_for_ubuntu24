@@ -1,0 +1,38 @@
+---
+# Получаем пользователей, использующих /bin/zsh
+- name: Get users with /bin/zsh shell
+  ansible.builtin.command: "getent passwd"
+  register: zsh_users_output
+  changed_when: false
+
+# Создаем список пользователей с /bin/zsh
+- name: Set zsh_users as a list of users with /bin/zsh
+  ansible.builtin.set_fact:
+    zsh_users: "{{ zsh_users_output.stdout_lines | select('search', '/bin/zsh') | map('split', ':') | map('first') | list }}"
+
+# Устанавливаем zsh для пользователей с /bin/zsh
+- name: Install zsh for users with /bin/zsh
+  ansible.builtin.package:
+    name: "zsh"
+    state: "present"
+  loop: "{{ zsh_users }}"
+  loop_control:
+    loop_var: "user"
+  changed_when: false
+
+# Устанавливаем oh-my-zsh для пользователей с /bin/zsh
+- name: Install oh-my-zsh for users with /bin/zsh
+  ansible.builtin.shell: |
+    if [ ! -d "$HOME/.oh-my-zsh" ]; then
+      echo "Installing Oh-My-Zsh for user {{ user }}"
+      sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    else
+      echo "Oh-My-Zsh is already installed for user {{ user }}"
+    fi
+  become: yes
+  loop: "{{ zsh_users }}"
+  loop_control:
+    loop_var: "user"
+  changed_when: false
+  environment:
+    HOME: "/home/{{ user }}"

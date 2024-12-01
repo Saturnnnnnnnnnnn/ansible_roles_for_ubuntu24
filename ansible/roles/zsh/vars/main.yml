@@ -1,0 +1,9 @@
+# Список пользователей, у которых установлен /bin/zsh
+zsh_users:
+  # Пользователь test_user1 использует оболочку /bin/zsh
+  - name: test_user1
+    shell: /bin/zsh
+  
+  # Пользователь test_user использует оболочку /bin/bash
+  - name: test_user
+    shell: /bin/bash
