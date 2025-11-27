@@ -1,16 +1,13 @@
-```markdown
 # Ansible Roles for Ubuntu 24 — Docker + Nginx + SSH + Users
 
 ## Описание
-Проект разворачивает тестовое окружение через Docker Compose и настраивает сервер с помощью Ansible ролей.  
+Проект разворачивает тестовое окружение через Docker Compose и настраивает сервер с помощью Ansible ролей.
 После выполнения:
-- `http://localhost/images` — структура файлов  
-- `http://localhost/images/<filename>` — изображение  
+- http://localhost/images — структура файлов
+- http://localhost/images/<filename> — изображение
 - SSH включён
 
 ## Структура проекта
-```
-
 .
 ├── ansible
 │   ├── ansible.cfg
@@ -27,57 +24,42 @@
 ├── Dockerfile
 ├── README.md
 
-
-````
-
 ## Запуск
-```bash
 docker compose up -d
 ansible-playbook -i ansible/inventory ansible/site.yml
-````
 
 ## Роли
+users
+- создание/удаление пользователей
+- оболочка
+- состояние
+- SSH ключ
+- пароль
+- группы
 
-### users
+zsh
+- установка zsh
+- установка oh-my-zsh
 
-* создание/удаление пользователей
-* оболочка
-* состояние
-* SSH ключ
-* пароль
-* группы
+ssh
+- отключён root
+- запрещены пустые пароли
+- VERBOSE
+- отключён X11Forwarding
 
-### zsh
+packages
+- обновление
+- htop, ncdu, git, nano
 
-* установка zsh
-* установка oh-my-zsh
+nginx
+- установка
+- gzip
+- логирование
+- кэш 1 час
+- /images и /images/<filename>
 
-### ssh
-
-* отключён root
-* запрещены пустые пароли
-* VERBOSE
-* отключён X11Forwarding
-
-### packages
-
-* обновление
-* htop, ncdu, git, nano
-
-### nginx
-
-* установка
-* gzip
-* логирование
-* кэш 1 час
-* `/images` и `/images/<filename>`
-
-### static
-
-* копирование статики
+static
+- копирование статики
 
 ## SSH
-
-```bash
 ssh user@localhost -p 22
-```
